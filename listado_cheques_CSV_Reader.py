@@ -1,16 +1,14 @@
 import sys
 import csv
-CSVR = sys.argv[1]
+CSV = sys.argv[1]
 DNI = int(sys.argv[2])
 SALIDA = sys.argv[3]
 TIPO = sys.argv[4]
 
 def buscarChequesPorCliente(dni):
     cheques =[]
-    archivo = open(CSVR,'r')
+    archivo = open(CSV,'r')
     registro = csv.reader(archivo)
-
-    
     for linea in registro:
         linea = linea
         if int(linea[8]) == dni:
@@ -29,7 +27,6 @@ def chequesEmitidos(dni):
     else:
         return emitidos
     
-
 def chequesDepositados(dni):
     depositados=[]
     cheques = buscarChequesPorCliente(dni)
@@ -40,35 +37,31 @@ def chequesDepositados(dni):
         return "El usuario no tiene cheques depositados"
     else:
         return depositados
-        
-    
-if SALIDA=="pantalla":
-    if(TIPO=="EMITIDO"):
-        print(chequesEmitidos(DNI))
-    else:
-        if (TIPO=="DEPOSITADO"):
-            print("hola")
-            p=chequesDepositados(DNI)
-            print(p)
-    
-elif SALIDA=="csv":
+
+def escribirCSV(tipo,dni):
     with open("DNI.csv", 'w') as chequesCliente:
-        writer = csv.writer(chequesCliente)
-        if TIPO=="EMITIDO":
-            for cheque in chequesEmitidos(DNI):
-                writer.writerow(cheque)
-                # chequesCliente.write(str(cheque))
-         
-        
-        if TIPO=="DEPOSITADO":
-            for cheque in chequesDepositados(DNI):
-                writer.writerow(cheque)
+                writer = csv.writer(chequesCliente)
+                if tipo=="EMITIDO":
+                    for cheque in chequesEmitidos(dni):
+                        writer.writerow(cheque)
+                if tipo=="DEPOSITADO":
+                    for cheque in chequesDepositados(dni):
+                        writer.writerow(cheque)
+                chequesCliente.close()
 
-    chequesCliente.close()
-    
+def printCheques(dni,tipo):
+    if(tipo=="EMITIDO"):
+        print(chequesEmitidos(dni))
+    else:
+        if (tipo=="DEPOSITADO"):
+            print(chequesDepositados(dni))
 
+def filtrarChequesPorEntrada(salida,tipo,dni):
+        if salida=="pantalla":
+            printCheques(dni,tipo)
+        elif salida=="csv":
+            escribirCSV(tipo,dni)
 
-        
-        
-#print("registro de cheques del cliente",buscarChequesPorCliente(DNI),"<<<<<<<<<<<<")
-
+ ################################################
+                
+filtrarChequesPorEntrada(SALIDA,TIPO,DNI)
