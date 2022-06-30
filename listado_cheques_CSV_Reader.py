@@ -5,6 +5,10 @@ DNI = int(sys.argv[2])
 SALIDA = sys.argv[3]
 TIPO = sys.argv[4]
 
+
+
+
+
 def buscarChequesPorCliente(dni):
     cheques =[]
     archivo = open(CSV,'r')
@@ -38,30 +42,28 @@ def chequesDepositados(dni):
     else:
         return depositados
 
-def escribirCSV(tipo,dni):
-    with open("DNI.csv", 'w') as chequesCliente:
-                writer = csv.writer(chequesCliente)
-                if tipo=="EMITIDO":
-                    for cheque in chequesEmitidos(dni):
-                        writer.writerow(cheque)
-                if tipo=="DEPOSITADO":
-                    for cheque in chequesDepositados(dni):
-                        writer.writerow(cheque)
-                chequesCliente.close()
 
-def printCheques(dni,tipo):
-    if(tipo=="EMITIDO"):
-        print(chequesEmitidos(dni))
-    else:
-        if (tipo=="DEPOSITADO"):
-            print(chequesDepositados(dni))
+    
 
-def filtrarChequesPorEntrada(salida,tipo,dni):
-        if salida=="pantalla":
-            printCheques(dni,tipo)
-        elif salida=="csv":
-            escribirCSV(tipo,dni)
+    
 
- ################################################
+
+if SALIDA=="pantalla":
+    if(TIPO=="EMITIDO"):
+                print(chequesEmitidos(DNI))
+else:
+    if (TIPO=="DEPOSITADO"):
+        print(chequesDepositados(DNI))
+    elif SALIDA=="csv":
+        with open("DNI.csv", 'w') as chequesCliente:
+            writer = csv.writer(chequesCliente)
+            if TIPO=="EMITIDO":
+                for cheque in chequesEmitidos(DNI):
+                    writer.writerow(cheque)
+            if TIPO=="DEPOSITADO":
+                for cheque in chequesDepositados(DNI):
+                    writer.writerow(cheque)
+        chequesCliente.close()
+
+
                 
-filtrarChequesPorEntrada(SALIDA,TIPO,DNI)
