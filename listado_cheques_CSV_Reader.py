@@ -5,6 +5,17 @@ DNI = int(sys.argv[2])
 SALIDA = sys.argv[3]
 TIPO = sys.argv[4]
 
+def existeEstado():
+    if(len(sys.argv)>=5):
+        P5 = sys.argv[5]
+        if((P5=="APROBADO")or(P5=="PENDIENTE")or(P5=="RECHAZADO")):
+            return True, P5 
+        else:
+            return False
+    else:
+        return False            
+
+
 
 
 
@@ -20,17 +31,34 @@ def buscarChequesPorCliente(dni):
     archivo.close()
     return cheques
 
+def filtrarPorEstado(estado, lista):
+    for cheque in lista:
+        if(cheque[-1] != estado):
+           lista = lista.remove(cheque)
+    
+    
+            
+            
+            
+      
+
+
+
+
 def chequesEmitidos(dni):
     emitidos=[]
     cheques = buscarChequesPorCliente(dni)
     for cheque in cheques:
         if cheque[9]  == "EMITIDO":
             emitidos.append(cheque)
+    if(existeEstado()==True):
+            v1,estado=existeEstado()
+            filtrarPorEstado(estado,emitidos)    
     if len(emitidos) == 0:
         return "El usuario no tiene cheques emitidos"
     else:
         return emitidos
-    
+
 def chequesDepositados(dni):
     depositados=[]
     cheques = buscarChequesPorCliente(dni)
@@ -41,12 +69,6 @@ def chequesDepositados(dni):
         return "El usuario no tiene cheques depositados"
     else:
         return depositados
-
-
-    
-
-    
-
 
 if SALIDA=="pantalla":
     if(TIPO=="EMITIDO"):
@@ -64,6 +86,16 @@ else:
                 for cheque in chequesDepositados(DNI):
                     writer.writerow(cheque)
         chequesCliente.close()
+
+
+
+    
+
+    
+
+    
+
+
 
 
                 
